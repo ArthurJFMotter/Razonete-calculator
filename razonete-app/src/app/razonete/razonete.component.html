@@ -1,83 +1,74 @@
 <div class="container">
-    <h1>Simulador de Razonete</h1>
+    <section class="aux-container">
+        <h1>Simulador de Razonete</h1>
 
-    <mat-form-field appearance="fill" class="full-width">
-        <mat-label>Nome da Conta</mat-label>
-        <input matInput [(ngModel)]="nomeConta" placeholder="Ex: Caixa">
-    </mat-form-field>
-
-    <div class="lancamentos-input">
-        <!-- unified input -->
-        <mat-form-field appearance="fill">
-            <mat-label>Valor</mat-label>
-            <input matInput type="number" [(ngModel)]="valorEntrada" placeholder="Valor a Creditar ou Debitar" name="valorEntrada">
-        </mat-form-field>
-        <!--
-        <mat-form-field appearance="fill">
-            <mat-label>Débito</mat-label>
-            <input matInput type="number" [(ngModel)]="valorEntrada" placeholder="Valor do Débito" name="valorDebito">
-        </mat-form-field>
-
-        <mat-form-field appearance="fill">
-            <mat-label>Crédito</mat-label>
-            <input matInput type="number" [(ngModel)]="valorEntrada" placeholder="Valor do Crédito" name="valorCredito">
-        </mat-form-field>
-        -->
-
-        <mat-form-field appearance="fill" class="descricao-input">
-            <mat-label>Descrição</mat-label>
-            <input matInput [(ngModel)]="descricaoEntrada" placeholder="Descrição do lançamento">
-        </mat-form-field>
-
-        <div class="botoes-lancamento">
-            <button mat-raised-button color="primary" (click)="adicionarLancamento('Débito')"
-                [disabled]="!isValorEntradaValido('Débito')">Adicionar Débito</button>
-            <button mat-raised-button color="accent" (click)="adicionarLancamento('Crédito')"
-                [disabled]="!isValorEntradaValido('Crédito')">Adicionar Crédito</button>
+        <div class="t-name-container">
+            <mat-form-field appearance="fill" class="t-name">
+                <mat-label>Nome da Conta</mat-label>
+                <input matInput [(ngModel)]="nomeConta" placeholder="Ex: Caixa">
+            </mat-form-field>
         </div>
-    </div>
 
-    <hr class="separador">
+        <div class="form">
+            <mat-form-field appearance="fill">
+                <mat-label>Valor</mat-label>
+                <input matInput type="number" [(ngModel)]="valorEntrada" placeholder="Valor a Creditar ou Debitar"
+                    name="valorEntrada">
+            </mat-form-field>
 
-    <!-- Estrutura do Razonete (T-Account) -->
-    <div class="razonete-container" *ngIf="nomeConta">
-        <div class="conta-nome">
-            {{ nomeConta || 'Nome da Conta' }}
-        </div>
-        <div class="t-body">
-            <div class="coluna debito-col">
-                <div class="coluna-header">Débitos</div>
-                <div class="entradas-lista">
-                    <div *ngIf="debitos.length === 0" class="sem-lancamentos">Nenhum lançamento</div>
-                    <div *ngFor="let lancamento of debitos" class="lancamento-item">
-                        <span class="descricao">{{ lancamento.descricao || 'Débito' }}</span>
-                        <span class="valor">{{ lancamento.valor | number:'1.2-2' }}</span>
-                    </div>
-                </div>
-                <div class="total-coluna">
-                    Total Débitos: {{ totalDebitos | number:'1.2-2' }}
-                </div>
-            </div>
-            <div class="coluna credito-col">
-                <div class="coluna-header">Créditos</div>
-                <div class="entradas-lista">
-                    <div *ngIf="creditos.length === 0" class="sem-lancamentos">Nenhum lançamento</div>
-                    <div *ngFor="let lancamento of creditos" class="lancamento-item">
-                        <span class="descricao">{{ lancamento.descricao || 'Crédito' }}</span>
-                        <span class="valor">{{ lancamento.valor | number:'1.2-2' }}</span>
-                    </div>
-                </div>
-                <div class="total-coluna">
-                    Total Créditos: {{ totalCreditos | number:'1.2-2' }}
-                </div>
+            <mat-form-field appearance="fill">
+                <mat-label>Descrição (opcional)</mat-label>
+                <input matInput [(ngModel)]="descricaoEntrada" placeholder="Descrição do lançamento">
+            </mat-form-field>
+
+            <div class="btns-container">
+                <button mat-raised-button color="primary" (click)="adicionarLancamento('Débito')"
+                    [disabled]="!isValorEntradaValido('Débito')">Adicionar Débito</button>
+                <button mat-raised-button color="accent" (click)="adicionarLancamento('Crédito')"
+                    [disabled]="!isValorEntradaValido('Crédito')">Adicionar Crédito</button>
             </div>
         </div>
-        <div class="saldo-final">
-             Saldo {{ saldoTipo }}: {{ saldoAbsoluto | number:'1.2-2' }}
+    </section>
+    <section class="aux-container">
+        <!-- Estrutura do Razonete (T-Account) -->
+        <div class="razonete-container" *ngIf="nomeConta">
+            <div class="conta-nome">
+                {{ nomeConta || 'Nome da Conta' }}
+            </div>
+            <div class="t-body">
+                <div class="coluna debito-col">
+                    <div class="coluna-header">Débitos</div>
+                    <div class="entradas-lista">
+                        <div *ngIf="debitos.length === 0" class="sem-lancamentos">Nenhum lançamento</div>
+                        <div *ngFor="let lancamento of debitos" class="lancamento-item">
+                            <span class="descricao">{{ lancamento.descricao || 'Débito' }}</span>
+                            <span class="valor">{{ lancamento.valor | number:'1.2-2' }}</span>
+                        </div>
+                    </div>
+                    <div class="total-coluna">
+                        Total Débitos: {{ totalDebitos | number:'1.2-2' }}
+                    </div>
+                </div>
+                <div class="coluna credito-col">
+                    <div class="coluna-header">Créditos</div>
+                    <div class="entradas-lista">
+                        <div *ngIf="creditos.length === 0" class="sem-lancamentos">Nenhum lançamento</div>
+                        <div *ngFor="let lancamento of creditos" class="lancamento-item">
+                            <span class="descricao">{{ lancamento.descricao || 'Crédito' }}</span>
+                            <span class="valor">{{ lancamento.valor | number:'1.2-2' }}</span>
+                        </div>
+                    </div>
+                    <div class="total-coluna">
+                        Total Créditos: {{ totalCreditos | number:'1.2-2' }}
+                    </div>
+                </div>
+            </div>
+            <div class="saldo-final">
+                Saldo {{ saldoTipo }}: {{ saldoAbsoluto | number:'1.2-2' }}
+            </div>
         </div>
-    </div>
-    <div *ngIf="!nomeConta" class="aviso-nome-conta">
-        Por favor, insira um nome para a conta para visualizar o razonete.
-    </div>
-
+        <div *ngIf="!nomeConta" class="name-handler">
+            Por favor, insira um nome para a conta para visualizar o razonete.
+        </div>
+    </section>
 </div>
