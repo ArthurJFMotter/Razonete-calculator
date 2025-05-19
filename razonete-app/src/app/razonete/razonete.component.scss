@@ -1,22 +1,166 @@
 .container {
     margin: 20px;
+    font-family: Arial, sans-serif;
 }
 
-.lancamentos {
+.full-width {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.lancamentos-input {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap; // Permite que os itens quebrem para a próxima linha em telas menores
+    gap: 15px; // Espaço entre os campos
     margin-bottom: 20px;
+    align-items: flex-start; // Alinha itens no topo
+
+    mat-form-field {
+        flex-grow: 1; // Permite que os campos de valor cresçam
+        min-width: 150px; // Largura mínima para campos de valor
+    }
+
+    .descricao-input {
+        flex-basis: 100%; // Faz o campo de descrição ocupar a largura total na próxima linha se necessário
+        min-width: 300px; // Garante uma boa largura para descrição
+    }
 }
 
-.lancamentos mat-form-field {
-    margin-bottom: 10px;
+.botoes-lancamento {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px; // Espaço acima dos botões se eles quebrarem linha
+    flex-basis: 100%; // Faz a div dos botões ocupar a linha toda
+    justify-content: flex-start;
 }
 
-.lancamentos button {
-    margin-right: 10px;
+.separador {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 0;
+    border-top: 1px solid #eee;
 }
 
-.saldo {
-    font-size: 1.2em;
-    font-weight: bold;
+.aviso-nome-conta {
+    text-align: center;
+    padding: 20px;
+    color: #777;
+    font-style: italic;
+}
+
+.razonete-container {
+    border: 2px solid black;
+    width: 100%;
+    max-width: 600px; // Limita a largura máxima para melhor visualização
+    margin: 20px auto; // Centraliza o razonete
+    background-color: #f9f9f9;
+
+    .conta-nome {
+        text-align: center;
+        font-weight: bold;
+        font-size: 1.2em;
+        padding: 10px;
+        border-bottom: 2px solid black;
+        background-color: #e0e0e0;
+    }
+
+    .t-body {
+        display: flex;
+        min-height: 200px; // Altura mínima para o corpo do T
+
+        .coluna {
+            flex: 1; // Divide o espaço igualmente
+            padding: 10px;
+            display: flex;
+            flex-direction: column; // Empilha cabeçalho, lista e total
+
+            .coluna-header {
+                font-weight: bold;
+                text-align: center;
+                padding-bottom: 8px;
+                border-bottom: 1px solid #ccc;
+                margin-bottom: 8px;
+            }
+
+            .entradas-lista {
+                flex-grow: 1; // Faz a lista ocupar o espaço disponível
+                overflow-y: auto; // Adiciona scroll se necessário
+
+                .sem-lancamentos {
+                    color: #888;
+                    text-align: center;
+                    padding-top: 20px;
+                    font-style: italic;
+                }
+            }
+
+            .lancamento-item {
+                display: flex;
+                justify-content: space-between;
+                padding: 4px 0;
+                border-bottom: 1px dotted #eee;
+
+                &:last-child {
+                    border-bottom: none;
+                }
+
+                .descricao {
+                    flex-grow: 1;
+                    text-align: left;
+                    margin-right: 10px;
+                    word-break: break-word;
+                }
+
+                .valor {
+                    text-align: right;
+                    min-width: 60px; // Para alinhar os números
+                }
+            }
+
+            .total-coluna {
+                font-weight: bold;
+                text-align: right;
+                padding-top: 10px;
+                margin-top: auto; // Empurra para o final da coluna
+                border-top: 1px solid #aaa;
+            }
+        }
+
+        .debito-col {
+            border-right: 2px solid black; // Linha vertical do T
+        }
+    }
+
+    .saldo-final {
+        text-align: center;
+        font-weight: bold;
+        font-size: 1.1em;
+        padding: 10px;
+        border-top: 2px solid black;
+        background-color: #e0e0e0;
+    }
+}
+
+// Responsividade para telas menores
+@media (max-width: 600px) {
+    .lancamentos-input {
+        flex-direction: column; // Empilha os campos de entrada
+
+        .descricao-input {
+            width: 100%;
+        }
+    }
+
+    .botoes-lancamento {
+        flex-direction: column;
+
+        button {
+            width: 100%;
+            margin-bottom: 5px;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
 }

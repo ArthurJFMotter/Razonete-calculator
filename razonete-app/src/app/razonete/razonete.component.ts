@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
 
 interface Lancamento {
+  id: number;
   tipo: 'Débito' | 'Crédito';
   valor: number;
   descricao?: string;
@@ -11,33 +11,64 @@ interface Lancamento {
   selector: 'app-razonete',
   standalone: false,
   templateUrl: './razonete.component.html',
-  styleUrl: './razonete.component.scss'
+  styleUrls: ['./razonete.component.scss']
 })
 export class RazoneteComponent {
   nomeConta: string = '';
-  debito: number | null = null;
-  credito: number | null = null;
-  descricao: string = '';
+  valorEntrada: number | null = null;
+  descricaoEntrada: string = '';
   lancamentos: Lancamento[] = [];
-  dataSource = new MatTableDataSource<Lancamento>(this.lancamentos);
-  displayedColumns: string[] = ['tipo', 'valor', 'descricao'];
+  private proximoId = 1;
+
+  isValorEntradaValido(tipo: 'Débito' | 'Crédito'): boolean {
+    return this.valorEntrada != null && this.valorEntrada > 0;
+  }
 
   adicionarLancamento(tipo: 'Débito' | 'Crédito') {
-    if ((tipo === 'Débito' && this.debito != null) || (tipo === 'Crédito' && this.credito != null)) {
-      const valor = tipo === 'Débito' ? this.debito : this.credito;
-      if (valor != null) {
-        this.lancamentos.push({ tipo: tipo, valor: valor, descricao: this.descricao });
-        this.dataSource = new MatTableDataSource<Lancamento>(this.lancamentos); // Refresh the table
-        this.debito = null; // Reset input fields
-        this.credito = null;
-        this.descricao = '';
-      }
+    if (this.valorEntrada != null && this.valorEntrada > 0) {
+      this.lancamentos.push({
+        id: this.proximoId++,
+        tipo: tipo,
+        valor: this.valorEntrada,
+        descricao: this.descricaoEntrada.trim() || (tipo === 'Débito' ? 'Lançamento a Débito' : 'Lançamento a Crédito')
+      });
+      this.lancamentos.sort((a, b) => a.id - b.id);
+
+      this.valorEntrada = null;
+      this.descricaoEntrada = '';
     }
   }
 
+  get debitos(): Lancamento[] {
+    return this.lancamentos.filter(l => l.tipo === 'Débito');
+  }
+
+  get creditos(): Lancamento[] {
+    return this.lancamentos.filter(l => l.tipo === 'Crédito');
+  }
+
+  get totalDebitos(): number {
+    return this.debitos.reduce((sum, l) => sum + l.valor, 0);
+  }
+
+  get totalCreditos(): number {
+    return this.creditos.reduce((sum, l) => sum + l.valor, 0);
+  }
+
   get saldo(): number {
-    let totalDebito = this.lancamentos.filter(l => l.tipo === 'Débito').reduce((sum, l) => sum + l.valor, 0);
-    let totalCredito = this.lancamentos.filter(l => l.tipo === 'Crédito').reduce((sum, l) => sum + l.valor, 0);
-    return totalDebito - totalCredito;
+    return this.totalDebitos - this.totalCreditos;
+  }
+
+  // ---- FIX STARTS HERE ----
+  get saldoAbsoluto(): number {
+    return Math.abs(this.saldo);
+  }
+  // ---- FIX ENDS HERE ----
+
+  get saldoTipo(): string {
+    const s = this.saldo;
+    if (s > 0) return 'Devedor';
+    if (s < 0) return 'Credor';
+    return 'Nulo';
   }
 }
