@@ -11,7 +11,7 @@ interface Lancamento {
   selector: 'app-razonete',
   standalone: false,
   templateUrl: './razonete.component.html',
-  styleUrls: ['./razonete.component.scss']
+  styleUrl: './razonete.component.scss'
 })
 export class RazoneteComponent {
   nomeConta: string = '';
@@ -59,11 +59,9 @@ export class RazoneteComponent {
     return this.totalDebitos - this.totalCreditos;
   }
 
-  // ---- FIX STARTS HERE ----
   get saldoAbsoluto(): number {
     return Math.abs(this.saldo);
   }
-  // ---- FIX ENDS HERE ----
 
   get saldoTipo(): string {
     const s = this.saldo;
